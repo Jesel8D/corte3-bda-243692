@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap');
+
+:root {
+  --amarillo: #FFE500;
+  --negro: #0D0D0D;
+  --blanco: #FFFFFF;
+  --coral: #FF6B6B;
+  --azul: #0057FF;
+  --gris: #F0F0F0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 500;
+  background-color: var(--gris);
+  color: var(--negro);
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+}
+
+button {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  background: var(--amarillo);
+  color: var(--negro);
+  border: 3px solid var(--negro);
+  box-shadow: 4px 4px 0 var(--negro);
+  border-radius: 0;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+
+button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--negro);
+}
+
+button:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+input, select {
+  font-family: 'Space Grotesk', sans-serif;
+  border: 2px solid var(--negro);
+  border-radius: 0;
+  background: var(--blanco);
+  padding: 10px 14px;
+  font-size: 1rem;
+}
+
+input:focus, select:focus {
+  outline: 3px solid var(--azul);
+  outline-offset: 2px;
+}
+
+.card {
+  background: var(--blanco);
+  border: 3px solid var(--negro);
+  box-shadow: 6px 6px 0 var(--negro);
+  padding: 24px;
+  border-radius: 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: var(--blanco);
+  border: 3px solid var(--negro);
+}
+
+th, td {
+  border: 2px solid var(--negro);
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background: var(--amarillo);
+  font-weight: 700;
+}
