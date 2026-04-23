@@ -1,0 +1,16 @@
+# dependencias frontend
+node_modules/
+dist/
+.env
+
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+venv/
+env/
+.venv/
+
+# mac/windows
+.DS_Store
+Thumbs.db
