@@ -22,11 +22,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-    # expose_headers es necesario para que el browser permita que JS lea
-    # headers de respuesta personalizados (X-Cache-Status).
-    # Sin esto, res.headers.get("X-Cache-Status") retorna null aunque
-    # el header esté presente en la respuesta HTTP.
-    expose_headers=["X-Cache-Status"],
+    expose_headers=["X-Cache-Status"]
 )
 
 # Inclusión dinámica de Enrutadores

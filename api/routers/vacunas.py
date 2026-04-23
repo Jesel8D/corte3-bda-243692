@@ -1,7 +1,8 @@
 import time
 import json
 import logging
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, Response, HTTPException
+import asyncpg
 from pydantic import BaseModel
 
 from api.db import get_connection
@@ -61,8 +62,11 @@ async def aplicar_vacuna(
             VALUES ($1, $2, $3, $4)
             RETURNING id
         """
-        # HARDENED: input parametrizado
-        row = await conn.fetchrow(query, vac.mascota_id, vac.vacuna_id, vac.veterinario_id, vac.costo_cobrado)
+        # HARDENED: input parametrizado y rescate de RLS block
+        try:
+            row = await conn.fetchrow(query, vac.mascota_id, vac.vacuna_id, vac.veterinario_id, vac.costo_cobrado)
+        except asyncpg.exceptions.InsufficientPrivilegeError:
+            raise HTTPException(status_code=403, detail="POSTGRES_RLS_GUARD: Violación de seguridad, no posees permisos de este paciente.")
         
     # Invalida la Caché para forzar la actualización inmediata en el siguiente GET
     await redis_client.delete(CACHE_KEY)

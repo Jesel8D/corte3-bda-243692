@@ -6,8 +6,8 @@ pool = None
 
 async def create_pool():
     global pool
-    # Lee DATABASE_URL del entorno (docker-compose.yml la inyecta).
-    # Fallback a localhost para desarrollo sin Docker.
+    # Conectamos con un usuario genérico de la app o postgres, 
+    # la db será clinica_vet
     db_url = os.environ.get("DATABASE_URL", "postgresql://localhost/clinica_vet")
     pool = await asyncpg.create_pool(db_url)
 
@@ -31,12 +31,8 @@ async def get_connection(db_user: str, vet_id: int | None = None):
             await conn.execute(f'SET LOCAL ROLE "{db_user}"')
             
             if vet_id is not None:
-                # SET LOCAL no soporta parámetros $1 en PostgreSQL (no pasa por
-                # el protocolo de prepared statements). Solución segura: forzar
-                # cast a int() antes de formatear — si vet_id no es un entero
-                # válido, int() lanza ValueError y la request falla limpiamente.
-                # El vet_id ya fue validado como int en dependencies.py línea 15.
-                await conn.execute(f"SET LOCAL \"app.current_vet_id\" = '{int(vet_id)}'")
+                # HARDENED: input parametrizado usando set_config en vez de SET LOCAL para soportar $1
+                await conn.execute("SELECT set_config('app.current_vet_id', $1, true)", str(vet_id))
             
             try:
                 yield conn

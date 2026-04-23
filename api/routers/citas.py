@@ -17,11 +17,8 @@ async def agendar_cita(cita: CitaCreate, user_data: tuple = Depends(get_current_
     db_user, vet_id = user_data
     
     async with get_connection(db_user, vet_id) as conn:
-        # sp_agendar_cita es un PROCEDURE (no función), se invoca con CALL.
-        # El NULL es el placeholder del parámetro OUT p_cita_id.
-        # asyncpg retorna las columnas OUT como resultado de fetchrow.
-        # HARDENED: todos los parámetros son posicionales ($1-$4), nunca concatenados.
-        query = "CALL sp_agendar_cita($1, $2, $3, $4, NULL)"
+        query = "SELECT * FROM sp_agendar_cita($1, $2, $3, $4)"
+        # HARDENED: input parametrizado
         row = await conn.fetchrow(query, cita.mascota_id, cita.veterinario_id, cita.fecha_hora, cita.motivo)
         
         return {"cita_id": dict(row)["p_cita_id"] if row else None}

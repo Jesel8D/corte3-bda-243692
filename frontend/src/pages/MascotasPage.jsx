@@ -18,11 +18,9 @@ export default function MascotasPage() {
 
   const handleBuscar = async () => {
     try {
-      // encodeURIComponent asegura que los caracteres especiales (' ; - etc.) 
-      // se transporten correctamente como query param HTTP.
-      // La DEFENSA contra SQLi está en el BACKEND (asyncpg parametrizado), 
-      // NO en esta capa de transporte.
-      const res = await fetch(`http://localhost:8000/mascotas?q=${encodeURIComponent(query)}`, {
+      // IMPORTANTE: Dejando esta inyección vulnerable en frontend de forma intencional 
+      // (sin url-encode ni sanitización) para probar el hardening en el Backend
+      const res = await fetch(`http://localhost:8000/mascotas?q=${query}`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       if (res.ok) {

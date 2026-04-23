@@ -51,6 +51,9 @@ export default function VacunacionPage() {
       if (res.ok) {
         setForm({ mascota_id: "", vacuna_id: "", costo: "" });
         loadData(); // Recarga automáticamente y debe marcar CACHE MISS según lógica backend
+      } else {
+        const errorData = await res.json();
+        alert(`❌ ALERTA DE SEGURIDAD ❌\n\n${errorData.detail || "Error interno de servidor"}`);
       }
     } catch (err) {
       console.error("Fallo al aplicar vacuna:", err);

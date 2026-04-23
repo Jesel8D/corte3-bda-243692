@@ -1,15 +1,15 @@
 import logging
-import os
 import redis.asyncio as redis
 
 # Configurar logger con formato que incluye timestamp
 logging.basicConfig(format="%(asctime)s %(message)s", level=logging.INFO)
 logger = logging.getLogger("api_cache")
 
-# Lee REDIS_URL del entorno (docker-compose.yml la inyecta).
-# Fallback a localhost para desarrollo sin Docker.
-_redis_url = os.environ.get("REDIS_URL", "redis://localhost:6379")
-redis_client = redis.from_url(_redis_url, decode_responses=False)
+import os
+
+# Instancia del cliente de Redis (conectado a localhost o REDIS_URL)
+redis_url = os.environ.get("REDIS_URL", "redis://localhost:6379")
+redis_client = redis.from_url(redis_url, decode_responses=False)
 
 async def get_redis():
     """Dependency para inyectar el cliente Redis en FastAPI"""
