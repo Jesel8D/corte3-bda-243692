@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:16-alpine
@@ -15,8 +13,8 @@ services:
       - ./backend/04_roles_y_permisos.sql:/docker-entrypoint-initdb.d/05_roles.sql
       - ./backend/05_rls.sql:/docker-entrypoint-initdb.d/06_rls.sql
       - pgdata:/var/lib/postgresql/data
-    ports: 
-      - "5432:5432"
+    # Sin port binding al host — la API conecta via red interna Docker (postgres:5432)
+    # Esto evita conflictos con otras instancias de postgres en el sistema.
     healthcheck: 
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s

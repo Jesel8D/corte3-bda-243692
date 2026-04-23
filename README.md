@@ -1,5 +1,12 @@
 # README — Decisiones de diseño
-## Clínica Veterinaria · Corte 3 BDA · Matrícula: [INSERTAR MATRÍCULA AQUÍ]
+## Clínica Veterinaria · Corte 3 BDA · Matrícula: 243692
+
+### Roles y Permisos (Punto 3.2 de la Rúbrica)
+- **rol_veterinario**: Tiene `SELECT` en `mascotas`, `duenos`, `inventario_vacunas` y vistas relacionadas para su trabajo clínico. Tiene `INSERT` en `citas` y `vacunas_aplicadas` para registrar su actividad, además de `EXECUTE` en procedures como `sp_agendar_cita`. Las políticas RLS restringen que solo vea/afecte sus propios registros.
+- **rol_recepcion**: Tiene `SELECT` en `mascotas` y `duenos` (incluyendo `UPDATE` para actualizar datos de contacto). Puede hacer `INSERT` en `citas`. Se le aplicó el principio de mínimo privilegio negando explícitamente el acceso a la tabla clínica `vacunas_aplicadas`.
+- **rol_administrador**: Tiene `ALL PRIVILEGES` sobre todas las tablas en el schema `public` para gestión global y auditoría. Puede ver todo sin restricciones de RLS.
+
+### Respuestas a Decisiones de Diseño
 
 ### 1. Política RLS en tabla mascotas
 Cláusula exacta:

@@ -78,10 +78,23 @@ GRANT SELECT ON vet_atiende_mascota TO rol_recepcion;
 -- Tabla: historial_movimientos
 GRANT SELECT ON historial_movimientos TO rol_veterinario;
 
--- Notas adicionales: 
--- rol_recepcion no tiene permisos sobre vacunas_aplicadas ni historial_movimientos.
--- Se asume el uso de secuencias estandar de tipo SERIAL.
-
--- Vistas
+-- Vista: v_mascotas_vacunacion_pendiente
+-- Necesita SELECT explícito para vet y recepción (el admin ya tiene GRANT ALL ON ALL TABLES)
 GRANT SELECT ON v_mascotas_vacunacion_pendiente TO rol_veterinario;
 GRANT SELECT ON v_mascotas_vacunacion_pendiente TO rol_recepcion;
+
+-- =========================================================================
+-- 4. Permisos de ejecución sobre Procedures y Funciones
+-- =========================================================================
+-- GRANT EXECUTE es obligatorio para que un rol pueda invocar un procedure/función.
+-- Con SECURITY DEFINER el procedure corre con privilegios del creador, pero el
+-- ROL INVOCANTE aún necesita EXECUTE explícito para poder llamarlo.
+GRANT EXECUTE ON PROCEDURE sp_agendar_cita(INT, INT, TIMESTAMP, TEXT) TO rol_veterinario;
+GRANT EXECUTE ON PROCEDURE sp_agendar_cita(INT, INT, TIMESTAMP, TEXT) TO rol_recepcion;
+
+GRANT EXECUTE ON FUNCTION fn_total_facturado(INT, INT) TO rol_veterinario;
+GRANT EXECUTE ON FUNCTION fn_total_facturado(INT, INT) TO rol_administrador;
+
+-- Notas adicionales:
+-- rol_recepcion no tiene permisos sobre vacunas_aplicadas ni historial_movimientos.
+-- Se asume el uso de secuencias estándar de tipo SERIAL.
